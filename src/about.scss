@@ -1,0 +1,32 @@
+//变量定义
+$grey: #1e1e1d;
+$yellow: #ffad15;
+$offwhite: #f8f8f8;
+$darkerwhite: darken($offwhite, 15); //SCSS函数
+$baseFontSize:14px;
+//循环
+@for $i from 1 through 3 {
+    .item-#{$i} {
+        width: 2em * $i;
+    }
+}
+
+//mixin
+@mixin px2rem($name, $px) {
+    #{$name}: $px / $baseFontSize * 1rem;
+}
+
+//嵌套
+.class3 {
+    font-weight: bold;
+    display: flex;
+    &-small {
+        color: $offwhite;
+        @include px2rem('font-size', 14px);
+    }
+}
+
+//autoprefixer
+::placeholder {
+    width: 10px;
+}
