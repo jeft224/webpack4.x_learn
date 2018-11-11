@@ -10,6 +10,9 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 // 用于压缩js
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+// 处理svg成雪碧图的插件
+const SpriteLoaderPlugin = require("svg-sprite-loader");
+
 const webpack = require('webpack')
 
 module.exports = merge(common, {
@@ -76,6 +79,16 @@ module.exports = merge(common, {
                             mimetype: 'image/png',
                         }
                     },
+                    // svg插件处理成雪碧图
+                    {
+                        loader:'svg-sprite-loader',
+                        options:{
+                            extract: true,
+                            spriteFilename: svgPath => `sprite${svgPath.substr(-4)}` //切割svg生成的文件名
+                        }
+                    },
+                    'svg-fill-loader',
+                    'svgo-loader'
                 ]
             },
         ]
@@ -88,6 +101,12 @@ module.exports = merge(common, {
         new CleanWebpackPlugin(['dist/*'], { //清除dist目录下为文件
             root: path.resolve(__dirname, '../')
         }),
+        new SpriteLoaderPlugin({
+            plainSprite: true, // 
+            spriteAttrs: {
+                id: 'my-custom-sprite-id'
+            } // svg导入的属性
+        })
     ],
     mode: 'production',
     output: {
